@@ -21,6 +21,7 @@ module.exports = {
   PAYLOAD: {
     TASK: {
       NOT_FOUND: 'Task not found!',
+      DELETED: 'Task deleted successfully!',
     },
   },
 

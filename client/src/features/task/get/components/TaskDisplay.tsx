@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { RefreshCwIcon, CheckCircleIcon, CircleIcon, ListIcon, LoaderIcon } from 'lucide-react';
+import { RefreshCwIcon, CheckCircleIcon, CircleIcon, ListIcon, LoaderIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import { useGet } from '../hooks/useGet';
 import { Button } from '@/components/ui/button';
 import { TabType } from '../types/tabType';
 import { TASK } from '@/common/messages';
+import TaskDeleteModal from '../../delete/components/TaskDeleteModal';
+import type { Task } from '@/types/task/task';
 
 const TaskDisplay: React.FC = () => {
   const { activeTasks, completedTasks, loading, error, refetch } = useGet();
   const [activeTab, setActiveTab] = useState<TabType>(TabType.ALL);
+
+  const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
+  const [deleteTaskTitle, setDeleteTaskTitle] = useState<string>('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const allTasks = [...activeTasks, ...completedTasks];
 
@@ -24,6 +30,13 @@ const TaskDisplay: React.FC = () => {
   };
 
   const tasksToDisplay = getTasksToDisplay();
+
+  // handle delete
+  const handleDelet = async (task: Task) => {
+    setDeleteTaskId(task._id);
+    setDeleteTaskTitle(task.title);
+    setIsDeleteModalOpen(true);
+  };
 
   return (
     // task display area
@@ -99,7 +112,7 @@ const TaskDisplay: React.FC = () => {
 
       {/* task display */}
       {!loading && !error && (
-        <section>
+        <section className="max-h-[60vh] overflow-y-auto pr-2">
           {tasksToDisplay.length > 0 ? (
             <ul className="space-y-3">
               {tasksToDisplay.map((task) => {
@@ -108,14 +121,46 @@ const TaskDisplay: React.FC = () => {
                 return (
                   <li
                     key={task._id}
-                    className={`p-4 rounded-lg border shadow-sm hover:shadow-md transition ${isCompleted ? 'bg-gray-50' : 'bg-white'}`}
+                    className="p-4 rounded-lg border shadow-sm hover:shadow-md transition bg-white flex items-center justify-between"
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      {isCompleted ? <CheckCircleIcon className="text-green-500 h-4 w-4" /> : <CircleIcon className="text-blue-500 h-4 w-4" />}
-                      <h3 className={`font-semibold ${isCompleted ? 'line-through text-gray-500' : ''}`}>{task.title}</h3>
+                    {/* left: task details */}
+                    <div className="flex flex-col w-full cursor-default flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        {/* icon */}
+                        {isCompleted ? <CheckCircleIcon className="text-green-500 h-4 w-4" /> : <CircleIcon className="text-blue-500 h-4 w-4" />}
+
+                        {/* title */}
+                        <h3 className={`font-semibold ${isCompleted ? 'line-through text-gray-500' : ''}`}>{task.title}</h3>
+                      </div>
+
+                      {/* description */}
+                      <p className={`text-sm ml-6 ${isCompleted ? 'text-gray-400' : 'text-gray-600'}`}>{task.description}</p>
+
+                      {/* task status */}
+                      {isCompleted ? (
+                        <p className="text-xs text-green-600 ml-6 mt-1 font-medium">Completed</p>
+                      ) : (
+                        <p className="text-xs text-blue-600 ml-6 mt-1 font-medium">Active</p>
+                      )}
                     </div>
-                    <p className={`text-sm ml-6 ${isCompleted ? 'text-gray-400' : 'text-gray-600'}`}>{task.description}</p>
-                    {isCompleted && <p className="text-xs text-green-600 ml-6 mt-1 font-medium">Completed</p>}
+
+                    {/* right: action buttons */}
+                    <div className="flex flex-row gap-2 items-center">
+                      {/* edit button */}
+                      <Button className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-600 text-white rounded-md cursor-pointer">
+                        <PencilIcon />
+                      </Button>
+
+                      {/* delete button */}
+                      <Button
+                        onClick={() => {
+                          handleDelet(task);
+                        }}
+                        className="px-3 py-1 text-sm bg-red-700 hover:bg-red-900 text-white rounded-md cursor-pointer"
+                      >
+                        <TrashIcon />
+                      </Button>
+                    </div>
                   </li>
                 );
               })}
@@ -136,6 +181,17 @@ const TaskDisplay: React.FC = () => {
           )}
         </section>
       )}
+
+      {/* delete modal */}
+      <TaskDeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        taskId={deleteTaskId!}
+        taskTitle={deleteTaskTitle}
+        onDeleted={() => {
+          refetch(); // refresh tasks after deletion
+        }}
+      />
     </div>
   );
 };

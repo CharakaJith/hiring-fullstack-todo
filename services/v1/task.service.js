@@ -133,7 +133,7 @@ const taskService = {
       success: true,
       status: STATUS_CODE.OK,
       data: {
-        task: updatedTask,
+        message: PAYLOAD.TASK.DELETED,
       },
     };
   },
