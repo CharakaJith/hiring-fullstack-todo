@@ -1,42 +1,43 @@
 import type { AxiosError } from 'axios';
 import { useState } from 'react';
-import { DeleteTask } from '../services/deleteApi';
-import type { DeleteErrorResponse } from '../types/deleteResponse';
+import { ToggleTaskStatus } from '../services/toggleApi';
+import type { ToggleErrorResponse } from '../types/toggleResponse';
 import { ERROR } from '@/common/messages';
+import type { Task } from '@/types/task/task';
 
-const useDelete = (taskId: string) => {
-  const [message, setMessage] = useState<string>('');
+const useToggle = () => {
+  const [task, setTask] = useState<Task>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  const deleteTask = async () => {
+  const changeTaskStatus = async (taskId: string) => {
     try {
       setLoading(true);
       setError('');
 
-      const res = await DeleteTask(taskId);
+      const res = await ToggleTaskStatus(taskId);
 
       if (res.data.success) {
-        setMessage(res.data.response.data.message);
+        setTask(res.data.response.data.task);
       } else {
         setError(res.data.response.data.message);
       }
     } catch (error) {
-      const axiosError = error as AxiosError<DeleteErrorResponse>;
+      const axiosError = error as AxiosError<ToggleErrorResponse>;
       const message = axiosError.response?.data?.response?.data?.message || ERROR.LOAD_FAILED('tasks');
 
       setError(message);
     } finally {
-      setLoading(false);
+      setLoading(true);
     }
   };
 
   return {
-    message,
+    task,
     loading,
     error,
-    deleteTask,
+    changeTaskStatus,
   };
 };
 
-export default useDelete;
+export default useToggle;

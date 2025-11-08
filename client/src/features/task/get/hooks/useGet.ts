@@ -5,7 +5,7 @@ import { GetTasks } from '../services/getApi';
 import type { GetErrorResponse } from '../types/getResponse';
 import { ERROR } from '@/common/messages';
 
-export const useGet = () => {
+const useGet = () => {
   const [activeTasks, setActiveTasks] = useState<Task[]>([]);
   const [completedTasks, setCompltedTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -47,3 +47,5 @@ export const useGet = () => {
     refetch: fetchTasks,
   };
 };
+
+export default useGet;

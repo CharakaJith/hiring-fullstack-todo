@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
 import { RefreshCwIcon, CheckCircleIcon, CircleIcon, ListIcon, LoaderIcon, PencilIcon, TrashIcon } from 'lucide-react';
-import { useGet } from '../hooks/useGet';
+import useGet from '../hooks/useGet';
 import { Button } from '@/components/ui/button';
 import { TabType } from '../types/tabType';
 import { TASK } from '@/common/messages';
 import TaskDeleteModal from '../../delete/components/TaskDeleteModal';
 import type { Task } from '@/types/task/task';
+import useToggle from '../../toggleStatus/hooks/useToggle';
+import ToolTip from '@/components/tooltip/tooltip';
 
 const TaskDisplay: React.FC = () => {
+  const { task, changeTaskStatus } = useToggle();
+
   const { activeTasks, completedTasks, loading, error, refetch } = useGet();
   const [activeTab, setActiveTab] = useState<TabType>(TabType.ALL);
 
   const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
   const [deleteTaskTitle, setDeleteTaskTitle] = useState<string>('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  // const [toggledTaskId, setToggledTaskId] = useState<string | null>(null);
 
   const allTasks = [...activeTasks, ...completedTasks];
 
@@ -36,6 +42,15 @@ const TaskDisplay: React.FC = () => {
     setDeleteTaskId(task._id);
     setDeleteTaskTitle(task.title);
     setIsDeleteModalOpen(true);
+  };
+
+  // handle toggle status
+  const handleToggleStatus = async (taskId: string) => {
+    await changeTaskStatus(taskId);
+
+    if (task) {
+      refetch(); // refresh all tasks after toggle
+    }
   };
 
   return (
@@ -115,8 +130,8 @@ const TaskDisplay: React.FC = () => {
         <section className="max-h-[60vh] overflow-y-auto pr-2">
           {tasksToDisplay.length > 0 ? (
             <ul className="space-y-3">
-              {tasksToDisplay.map((task) => {
-                const isCompleted = completedTasks.some((completedTask) => completedTask._id === task._id);
+              {tasksToDisplay.map((task: Task) => {
+                const isCompleted = completedTasks.some((completedTask: Task) => completedTask._id === task._id);
 
                 return (
                   <li
@@ -126,8 +141,24 @@ const TaskDisplay: React.FC = () => {
                     {/* left: task details */}
                     <div className="flex flex-col w-full cursor-default flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        {/* icon */}
-                        {isCompleted ? <CheckCircleIcon className="text-green-500 h-4 w-4" /> : <CircleIcon className="text-blue-500 h-4 w-4" />}
+                        {/* change task status */}
+                        <ToolTip text={isCompleted ? 'Mark as Active' : 'Mark as Completed'}>
+                          {isCompleted ? (
+                            <CheckCircleIcon
+                              onClick={() => {
+                                handleToggleStatus(task._id);
+                              }}
+                              className="text-green-500 h-4 w-4 cursor-pointer"
+                            />
+                          ) : (
+                            <CircleIcon
+                              onClick={() => {
+                                handleToggleStatus(task._id);
+                              }}
+                              className="text-blue-500 h-4 w-4 cursor-pointer"
+                            />
+                          )}
+                        </ToolTip>
 
                         {/* title */}
                         <h3 className={`font-semibold ${isCompleted ? 'line-through text-gray-500' : ''}`}>{task.title}</h3>
@@ -147,19 +178,23 @@ const TaskDisplay: React.FC = () => {
                     {/* right: action buttons */}
                     <div className="flex flex-row gap-2 items-center">
                       {/* edit button */}
-                      <Button className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-600 text-white rounded-md cursor-pointer">
-                        <PencilIcon />
-                      </Button>
+                      <ToolTip text={`Update task ${task.title}`}>
+                        <Button className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-600 text-white rounded-md cursor-pointer">
+                          <PencilIcon />
+                        </Button>
+                      </ToolTip>
 
                       {/* delete button */}
-                      <Button
-                        onClick={() => {
-                          handleDelet(task);
-                        }}
-                        className="px-3 py-1 text-sm bg-red-700 hover:bg-red-900 text-white rounded-md cursor-pointer"
-                      >
-                        <TrashIcon />
-                      </Button>
+                      <ToolTip text={`Delete task ${task.title}`}>
+                        <Button
+                          onClick={() => {
+                            handleDelet(task);
+                          }}
+                          className="px-3 py-1 text-sm bg-red-700 hover:bg-red-900 text-white rounded-md cursor-pointer"
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </ToolTip>
                     </div>
                   </li>
                 );

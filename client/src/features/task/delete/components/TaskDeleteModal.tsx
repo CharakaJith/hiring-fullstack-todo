@@ -5,7 +5,7 @@ import type { TaskDeleteProp } from '../props/taskDeleteProp';
 import useDelete from '../hooks/useDelete';
 
 const TaskDeleteModal: React.FC<TaskDeleteProp> = ({ isOpen, onClose, taskId, taskTitle, onDeleted }) => {
-  const { deleteTask, loading, error, message } = useDelete(taskId);
+  const { deleteTask, loading, error } = useDelete(taskId);
 
   if (!isOpen) return null;
 
