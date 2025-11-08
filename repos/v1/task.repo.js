@@ -23,6 +23,22 @@ const taskRepo = {
       throw new CustomError(REPO.FAILED.GET.ALL(ENTITY, error.message), STATUS_CODE.SERVER_ERROR);
     }
   },
+
+  getById: async (taskId) => {
+    try {
+      return await Task.findById(taskId);
+    } catch (error) {
+      throw new CustomError(REPO.FAILED.GET.BY_ID(ENTITY, error.message), STATUS_CODE.SERVER_ERROR);
+    }
+  },
+
+  update: async (task) => {
+    try {
+      return await task.save();
+    } catch (error) {
+      throw new CustomError(REPO.FAILED.UPDATE(ENTITY, error.message), STATUS_CODE.SERVER_ERROR);
+    }
+  },
 };
 
 module.exports = taskRepo;

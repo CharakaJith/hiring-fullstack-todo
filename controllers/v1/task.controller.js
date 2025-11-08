@@ -21,9 +21,34 @@ const taskController = {
   create: async (req, res, next) => {
     try {
       const createData = ({ title, description } = req.body);
-      //   createData.user = req.user; // TODO:
+      createData.user = {
+        id: 1, // NOTE: set to 1 by default, must be request user ID
+      };
 
       const response = await taskService.createNewTask(createData);
+      const { success, status, data } = response;
+
+      res.status(status).json({
+        success: success,
+        response: {
+          status: status,
+          data: data,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  update: async (req, res, next) => {
+    try {
+      const updateData = ({ title, description } = req.body);
+      updateData.id = req.params.id;
+      updateData.user = {
+        id: 1, // NOTE: set to 1 by default, must be request user ID
+      };
+
+      const response = await taskService.updateExistingTask(updateData);
       const { success, status, data } = response;
 
       res.status(status).json({

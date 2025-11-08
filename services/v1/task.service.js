@@ -1,7 +1,9 @@
+const CustomError = require('../../util/customeError');
 const taskRepo = require('../../repos/v1/task.repo');
 const displayIdGenerator = require('../../util/displayIdGenerator');
 const STATUS = require('../../enums/task.enum');
 const { STATUS_CODE } = require('../../constants/app.constants');
+const { PAYLOAD, AUTH } = require('../../common/messages');
 
 const taskService = {
   getAllTasks: async () => {
@@ -29,7 +31,7 @@ const taskService = {
   },
 
   createNewTask: async (data) => {
-    const { title, description } = data;
+    const { title, description, user } = data;
 
     // generate display id
     const displayId = await displayIdGenerator.TASK_ID();
@@ -37,7 +39,7 @@ const taskService = {
     // create task
     const taskDetails = {
       displayId: displayId,
-      userId: 1, // NOTE: set to 1 by default, must be request user ID
+      userId: user.id,
       title: title,
       description: description,
       status: STATUS.ACTIVE,
@@ -49,6 +51,34 @@ const taskService = {
       status: STATUS_CODE.CREATED,
       data: {
         task: newTask,
+      },
+    };
+  },
+
+  updateExistingTask: async (data) => {
+    const { id, title, description, user } = data;
+
+    // get task
+    const task = await taskRepo.getById(id);
+    if (!task) {
+      throw new CustomError(PAYLOAD.TASK.NOT_FOUND, STATUS_CODE.NOT_FOUND);
+    }
+
+    // validate request user
+    if (task.userId !== user.id) {
+      throw new CustomError(AUTH.FORBIDDEN, STATUS_CODE.FORBIDDON);
+    }
+
+    // update task
+    task.title = title;
+    task.description = description;
+    const updatedTask = await taskRepo.update(task);
+
+    return {
+      success: true,
+      status: STATUS_CODE.CREATED,
+      data: {
+        task: updatedTask,
       },
     };
   },
