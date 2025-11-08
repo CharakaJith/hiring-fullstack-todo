@@ -11,13 +11,14 @@ const taskService = {
 
     tasks = tasks.reduce(
       (acc, task) => {
-        acc[task.status].push(task);
+        if (task.status === STATUS.ACTIVE || task.status === STATUS.COMPLETED) {
+          acc[task.status].push(task);
+        }
         return acc;
       },
       {
         [STATUS.ACTIVE]: [],
         [STATUS.COMPLETED]: [],
-        [STATUS.DELETED]: [],
       },
     );
 
