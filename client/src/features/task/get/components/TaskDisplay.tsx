@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { RefreshCwIcon, CheckCircleIcon, CircleIcon, ListIcon, LoaderIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import useGet from '../hooks/useGet';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,12 @@ import type { Task } from '@/types/task/task';
 import useToggle from '../../toggleStatus/hooks/useToggle';
 import ToolTip from '@/components/tooltip/tooltip';
 
-const TaskDisplay: React.FC = () => {
+// Define the ref type
+export interface TaskDisplayRef {
+  refetch: () => void;
+}
+
+const TaskDisplay = forwardRef<TaskDisplayRef>((props, ref) => {
   const { task, changeTaskStatus } = useToggle();
 
   const { activeTasks, completedTasks, loading, error, refetch } = useGet();
@@ -19,7 +24,12 @@ const TaskDisplay: React.FC = () => {
   const [deleteTaskTitle, setDeleteTaskTitle] = useState<string>('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // const [toggledTaskId, setToggledTaskId] = useState<string | null>(null);
+  // Eepose refetch
+  useImperativeHandle(ref, () => ({
+    refetch: () => {
+      refetch();
+    },
+  }));
 
   const allTasks = [...activeTasks, ...completedTasks];
 
@@ -38,7 +48,7 @@ const TaskDisplay: React.FC = () => {
   const tasksToDisplay = getTasksToDisplay();
 
   // handle delete
-  const handleDelet = async (task: Task) => {
+  const handleDelete = async (task: Task) => {
     setDeleteTaskId(task._id);
     setDeleteTaskTitle(task.title);
     setIsDeleteModalOpen(true);
@@ -47,7 +57,6 @@ const TaskDisplay: React.FC = () => {
   // handle toggle status
   const handleToggleStatus = async (taskId: string) => {
     await changeTaskStatus(taskId);
-
     if (task) {
       refetch(); // refresh all tasks after toggle
     }
@@ -165,7 +174,7 @@ const TaskDisplay: React.FC = () => {
                       </div>
 
                       {/* description */}
-                      <p className={`text-sm ml-6 ${isCompleted ? 'text-gray-400' : 'text-gray-600'}`}>{task.description}</p>
+                      <p className={`text-sm ml-6 ${isCompleted ? 'text-gray-400' : 'text-gray-600'}`}>{task.description ? task.description : '-'}</p>
 
                       {/* task status */}
                       {isCompleted ? (
@@ -188,7 +197,7 @@ const TaskDisplay: React.FC = () => {
                       <ToolTip text={`Delete task ${task.title}`}>
                         <Button
                           onClick={() => {
-                            handleDelet(task);
+                            handleDelete(task);
                           }}
                           className="px-3 py-1 text-sm bg-red-700 hover:bg-red-900 text-white rounded-md cursor-pointer"
                         >
@@ -229,6 +238,8 @@ const TaskDisplay: React.FC = () => {
       />
     </div>
   );
-};
+});
+
+TaskDisplay.displayName = 'TaskDisplay';
 
 export default TaskDisplay;

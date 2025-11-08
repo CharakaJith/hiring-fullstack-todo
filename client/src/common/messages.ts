@@ -11,3 +11,7 @@ export const TASK = {
     COMPLTED: 'No completed tasks found. Complete some tasks to see them here!',
   },
 };
+
+export const VALIDATE = {
+  EMPTY_FIELDS: 'Please fill in all required fields.',
+};
