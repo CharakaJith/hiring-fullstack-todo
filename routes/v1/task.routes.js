@@ -5,6 +5,7 @@ const validator = require('../../middleware/requestValidator');
 const taskCreateSchema = require('../../schemas/v1/task/taskCreate.schema');
 const taskUpdateSchema = require('../../schemas/v1/task/taskUpdate.schema');
 const taskToggleStatusSchema = require('../../schemas/v1/task/taskToggleStatus.schema');
+const taskDeleteSchema = require('../../schemas/v1/task/taskDelete.schema');
 
 const taskRouter = express.Router();
 
@@ -12,5 +13,6 @@ taskRouter.get('/', taskController.getAll);
 taskRouter.post('/', validator(taskCreateSchema), taskController.create);
 taskRouter.put('/:id', validator(taskUpdateSchema), taskController.update);
 taskRouter.patch('/:id/done', validator(taskToggleStatusSchema), taskController.toggleStatus);
+taskRouter.delete('/:id', validator(taskDeleteSchema), taskController.delete);
 
 module.exports = taskRouter;

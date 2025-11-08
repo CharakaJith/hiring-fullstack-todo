@@ -85,6 +85,29 @@ const taskController = {
       next(error);
     }
   },
+
+  delete: async (req, res, next) => {
+    try {
+      const deleteData = {};
+      deleteData.id = req.params.id;
+      deleteData.user = {
+        id: 1, // NOTE: set to 1 by default, must be request user ID
+      };
+
+      const response = await taskService.deleteTask(deleteData);
+      const { success, status, data } = response;
+
+      res.status(status).json({
+        success: success,
+        response: {
+          status: status,
+          data: data,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = taskController;

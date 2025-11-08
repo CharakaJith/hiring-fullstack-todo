@@ -59,7 +59,7 @@ const taskService = {
     const { id, title, description, user } = data;
 
     // get task
-    const task = await taskRepo.getById(id);
+    const task = await taskRepo.getActiveById(id);
     if (!task) {
       throw new CustomError(PAYLOAD.TASK.NOT_FOUND, STATUS_CODE.NOT_FOUND);
     }
@@ -87,7 +87,7 @@ const taskService = {
     const { id, user } = data;
 
     // get task
-    const task = await taskRepo.getById(id);
+    const task = await taskRepo.getActiveById(id);
     if (!task) {
       throw new CustomError(PAYLOAD.TASK.NOT_FOUND, STATUS_CODE.NOT_FOUND);
     }
@@ -99,6 +99,33 @@ const taskService = {
 
     // update task status
     task.status = task.status === STATUS.ACTIVE ? STATUS.COMPLETED : STATUS.ACTIVE;
+    const updatedTask = await taskRepo.update(task);
+
+    return {
+      success: true,
+      status: STATUS_CODE.OK,
+      data: {
+        task: updatedTask,
+      },
+    };
+  },
+
+  deleteTask: async (data) => {
+    const { id, user } = data;
+
+    // get task
+    const task = await taskRepo.getActiveById(id);
+    if (!task) {
+      throw new CustomError(PAYLOAD.TASK.NOT_FOUND, STATUS_CODE.NOT_FOUND);
+    }
+
+    // validate request user
+    if (task.userId !== user.id) {
+      throw new CustomError(AUTH.FORBIDDEN, STATUS_CODE.FORBIDDON);
+    }
+
+    // set task status to delete
+    task.status = STATUS.DELETED;
     const updatedTask = await taskRepo.update(task);
 
     return {

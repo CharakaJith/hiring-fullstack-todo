@@ -1,6 +1,7 @@
 const Task = require('../../models/task');
 
 const CustomError = require('../../util/customeError');
+const STATUS = require('../../enums/task.enum');
 const { REPO } = require('../../common/messages');
 const { STATUS_CODE } = require('../../constants/app.constants');
 
@@ -24,9 +25,12 @@ const taskRepo = {
     }
   },
 
-  getById: async (taskId) => {
+  getActiveById: async (taskId) => {
     try {
-      return await Task.findById(taskId);
+      return await Task.findOne({
+        _id: taskId,
+        status: { $ne: STATUS.DELETED }, // only fetch if status is NOT deleted
+      });
     } catch (error) {
       throw new CustomError(REPO.FAILED.GET.BY_ID(ENTITY, error.message), STATUS_CODE.SERVER_ERROR);
     }
