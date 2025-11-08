@@ -1,153 +1,128 @@
-# 📝 Full Stack Take-home Assignment – TODO App
+<div align="center">
+  <h1="center">MERN Stack Task Tracking Web Applicatino</h1>
+  <h4="center">Full Stack Take-home Assignment (Type B Digital)</h4>
+</div>
 
-## 🧠 Objective
+![Landing page](./public/landing.png)
+![Form Validation](./public/validation.png)
+![API Validation](./public/validation_2.png)
+![Edit Form](./public/edit.png)
+![Delete Modal](./public/delete.png)
+![Not Found Page](./public/not_found.png)
 
-This exercise is intended to evaluate your understanding of full-stack development using your preferred stack.
+### This project is a MERN stack task tracking web application developed as part of the Type B Digital Full-stack Developer technical assessment. The application focuses on backend functionalities, seamless user interface and provides a robust and secure foundation for an online todo application.
 
-You’ll build a simple **TODO app** with basic task management functionality, covering both frontend and backend.
+### Key features include task management, and robust data validation with proper response codes and error handling. The backend is designed for scalability and maintainability, providing a solid foundation for a simple task tracking application.
 
----
+### The application follows a modular and secure architecture with clear separation of concerns, leveraging the MERN stack for scalability and maintainability. It implements a RESTful API with task management, and robust data validation.
 
-## 📦 Tech Stack Requirements
+### The project includes structured environment configuration for both development and production. Future improvements could include implementing authentication and role based access control, and enhancing frontend-backend interactions.
 
-- **Frontend:** React.js
-- **Backend:** Node.js with Express.js is preferred. But you may choose your preferred backend technology.
-- **Database:** MongoDB or any other Database technologies
+### Built with
 
-You are free to use any UI libraries or tools that improve your productivity.
+- [![React][React.js]][React-url]
+- [![Vite][Vite.js]][Vite-url]
+- [![TailwindCss][TailwindCss]][Tailwind-url]
+- [![Node][Node.js]][Node-url]
+- [![Express][Express.js]][Express.js-url]
+- [![MongoDB][MongoDB]][MongoDB-url]
+- [![Mongoose][Mongoose]][Mongoose-url]
 
----
+## Getting started
 
-## ✨ Features
+### Prerequisites
 
-The app should allow users to:
+- node.js: [Node.js download page](https://nodejs.org/en/download)
+- React.js: [React official website](https://reactjs.org/)
+- Vite: [Vite start guide](https://vite.dev/guide/)
+- Tailwind CSS: [Tailwind getting stared](https://tailwindcss.com/docs/installation/using-vite)
+- Mongo DB: [Mongo DB official website](https://www.mongodb.com/)
 
-- ✅ **View TODOs**: Display a list of all TODO items.
-- ➕ **Create a TODO**: Add a new TODO with a title and optional description.
-- ✏️ **Edit a TODO**: Update the title and/or description.
-- ✅ **Mark as Done**: Toggle a TODO's `done` status.
-- ❌ **Delete a TODO**: Remove a TODO item from the list.
+### Installation
 
----
+1. Clone the repo
+   ```bash
+   git clone https://github.com/CharakaJith/hiring-fullstack-todo.git
+   ```
+2. Step into the project
+   ```bash
+   cd hiring-fullstack-todo
+   ```
+3. Checkout to `develop` branc
+   ```
+   git checkout develop
+   ```
 
-## 🗂️ Recommended Folder Structure
+### Environment variables setup
 
-You're free to organize your code as you see fit, but here's a suggested structure:
+#### Server side
 
-```
-hiring-fullstack-todo/
-├── client/          # React frontend
-│   ├── README.md
-│   └── ...
-├── server/          # Express backend
-│   ├── README.md
-│   └── ...
-├── README.md
-```
+1. Create a `.env.dev` file in root folder
+   ```
+   New-Item -Path . -Name ".env.dev" -ItemType "File"
+   ```
+2. Open the `.env` file and update the variables
 
----
+   ```
+   ## environment variables
+   ENV=development
+   PORT=8000 (make sure the port is set to 8000 if running the server with docker)
 
-## 🛠️ API Requirements
+   ## mongo db
+   MONGO_URI=mongodb+srv://<username>:<password>@<cluster-name>-cluster.2bsublg.mongodb.net/<database>
+   ```
 
-Your Express backend should expose the following RESTful API endpoints:
+#### Client side
 
-| Method | Endpoint                | Description                      |
-|--------|-------------------------|----------------------------------|
-| GET    | `/api/todos`            | Get all TODO items               |
-| POST   | `/api/todos`            | Create a new TODO item           |
-| PUT    | `/api/todos/:id`        | Update a TODO (title/description)|
-| PATCH  | `/api/todos/:id/done`   | Toggle the `done` status         |
-| DELETE | `/api/todos/:id`        | Delete a TODO                    |
+1. Create a `.env` file in the client folder
+   ```
+   New-Item -Path . -Name ".env" -ItemType "File"
+   ```
+2. Open the `.env` file and update the variables
+   ```
+   ## base url
+   VITE_API_BASE_URL=http://localhost:8000 (or the port you have used)
+   ```
 
-### Database Model Example
+### Start the project using terminal
 
-```json
-{
-  "_id": "string",
-  "title": "string",
-  "description": "string (optional)",
-  "done": "boolean",
-  "createdAt": "Timestamp",
-  "updatedAt": "Timestamp"
-}
-```
+1. Install NPM packages
+   ```bash
+   npm run install:all
+   ```
+2. Start the server and client
+   ```bash
+   npm run start
+   ```
 
-You are encouraged to use **Mongoose** for schema modeling.
+### Other scripts
 
----
+1. Start the development server
+   ```bash
+   npm run dev
+   ```
+2. Start the client
+   ```bash
+   npm run client
+   ```
 
-## 🖼️ Frontend Expectations
+## Contact
 
-- Display all TODOs in a clean and simple UI
-- Provide a form to add new TODOs
-- Allow editing a TODO (title/description)
-- Provide a way to mark as done/undone (e.g., checkbox, button)
-- Add a delete button
-- Clearly show completed tasks (e.g., strikethrough or faded style)
+Email: [charaka.info@gmail.com](mailto:charaka.info@gmail.com) | LinkedIn: [Charaka Jith Gunasinghe](https://www.linkedin.com/in/charaka-gunasinghe/)
 
----
+<!-- MARKDOWN LINKS & IMAGES -->
 
-## ⚙️ Functional Expectations
-
-- The frontend should talk to the backend via HTTP API
-- The backend should persist TODOs in MongoDB
-- Handle loading and error states gracefully
-
-**Bonus Points For:**
-- Form validation
-- User-friendly error messages
-- Optimistic UI updates
-- Nice touches in UX (e.g., animations, transitions)
-- Monorepo setup using an appropriate technology
-
----
-
-## 🧾 Submission Instructions
-
-Please follow these steps for submission:
-
-1. **Fork** this repository to your own GitHub account.
-2. Create a new branch named `develop` in your fork.
-3. Complete the assignment on the `develop` branch.
-4. Create a **Pull Request to your own fork** (`develop` → `main`).
-5. Fill out the provided **PR template**, including:
-   - Summary of what you built
-   - Solution rationale & user value
-   - A short demo video
-6. Fill [this form](https://coda.io/form/Type-B-Digital-Take-Home-assessment-submission_dU8ZJTHWnjv) to officially submit your work.
-
-> ⚠️ Submissions may not be considered if instructions are not followed properly
-
----
-
-## ⏳ Time Expectation
-
-This task is expected to take **6–8 hours**. Please don’t worry about making it perfect — we’re primarily looking at how you approach full-stack development and structure your solution.
-
----
-
-## ✅ Evaluation Criteria
-
-- Proper use of chosen stack
-- RESTful API structure and usage
-- Code readability and organization
-- Functional completeness of required features
-- Basic UX considerations
-- Ability to follow instructions and communicate clearly
-
----
-
-## 📥 README & PR Template Required
-
-Your submission must include:
-
-- `README.md` file for the frontend with instructions on how to set up and run the frontend app
-- `README.md` file for the backend with:
-  - How to set up and run the backend
-  - MongoDB connection notes (e.g., Atlas or local)
-  - Any assumptions or limitations
-- A completed PR template in your pull request
-
----
-
-Thank you for taking the time to complete this assignment! We’re looking forward to seeing what you build.
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[Vite-url]: https://vite.dev
+[TailwindCss]: https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[Node.js]: https://img.shields.io/badge/Node.js-12A952?style=for-the-badge&logo=node.js&logoColor=white
+[Node-url]: https://nodejs.org/en
+[Express.js]: https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white
+[Express.js-url]: https://expressjs.com/
+[MongoDB]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white
+[MongoDB-url]: https://www.mongodb.com/
+[Mongoose]: https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongodb&logoColor=white
+[Mongoose-url]: https://mongoosejs.com/
