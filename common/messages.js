@@ -16,4 +16,11 @@ module.exports = {
   VALIDATION: {
     FAILED: 'Validation failed.',
   },
+
+  // repository layer messages
+  REPO: {
+    FAILED: {
+      CREATE: (entity, error) => `Failed to create new ${entity}: ${error}`,
+    },
+  },
 };

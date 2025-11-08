@@ -3,6 +3,6 @@ const routesV1 = express.Router();
 
 const taskRouter = require('./task.routes');
 
-routesV1.use('/task', taskRouter);
+routesV1.use('/todos', taskRouter);
 
 module.exports = routesV1;
