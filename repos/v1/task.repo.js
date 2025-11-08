@@ -15,6 +15,14 @@ const taskRepo = {
       throw new CustomError(REPO.FAILED.CREATE(ENTITY, error.message), STATUS_CODE.SERVER_ERROR);
     }
   },
+
+  getAll: async () => {
+    try {
+      return await Task.find({});
+    } catch (error) {
+      throw new CustomError(REPO.FAILED.GET.ALL(ENTITY, error.message), STATUS_CODE.SERVER_ERROR);
+    }
+  },
 };
 
 module.exports = taskRepo;

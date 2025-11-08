@@ -21,6 +21,9 @@ module.exports = {
   REPO: {
     FAILED: {
       CREATE: (entity, error) => `Failed to create new ${entity}: ${error}`,
+      GET: {
+        ALL: (entity, error) => `Failed to get all ${entity}: ${error}`,
+      },
     },
   },
 };

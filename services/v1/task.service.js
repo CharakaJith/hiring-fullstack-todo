@@ -4,6 +4,30 @@ const STATUS = require('../../enums/task.enum');
 const { STATUS_CODE } = require('../../constants/app.constants');
 
 const taskService = {
+  getAllTasks: async () => {
+    let tasks = await taskRepo.getAll();
+
+    tasks = tasks.reduce(
+      (acc, task) => {
+        acc[task.status].push(task);
+        return acc;
+      },
+      {
+        [STATUS.ACTIVE]: [],
+        [STATUS.COMPLETED]: [],
+        [STATUS.DELETED]: [],
+      },
+    );
+
+    return {
+      success: true,
+      status: STATUS_CODE.CREATED,
+      data: {
+        tasks: tasks,
+      },
+    };
+  },
+
   createNewTask: async (data) => {
     const { title, description } = data;
 
