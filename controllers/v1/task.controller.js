@@ -62,6 +62,29 @@ const taskController = {
       next(error);
     }
   },
+
+  toggleStatus: async (req, res, next) => {
+    try {
+      const toggleData = {};
+      toggleData.id = req.params.id;
+      toggleData.user = {
+        id: 1, // NOTE: set to 1 by default, must be request user ID
+      };
+
+      const response = await taskService.toggleTaskStatus(toggleData);
+      const { success, status, data } = response;
+
+      res.status(status).json({
+        success: success,
+        response: {
+          status: status,
+          data: data,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = taskController;

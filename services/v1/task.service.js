@@ -23,7 +23,7 @@ const taskService = {
 
     return {
       success: true,
-      status: STATUS_CODE.CREATED,
+      status: STATUS_CODE.OK,
       data: {
         tasks: tasks,
       },
@@ -76,7 +76,34 @@ const taskService = {
 
     return {
       success: true,
-      status: STATUS_CODE.CREATED,
+      status: STATUS_CODE.OK,
+      data: {
+        task: updatedTask,
+      },
+    };
+  },
+
+  toggleTaskStatus: async (data) => {
+    const { id, user } = data;
+
+    // get task
+    const task = await taskRepo.getById(id);
+    if (!task) {
+      throw new CustomError(PAYLOAD.TASK.NOT_FOUND, STATUS_CODE.NOT_FOUND);
+    }
+
+    // validate request user
+    if (task.userId !== user.id) {
+      throw new CustomError(AUTH.FORBIDDEN, STATUS_CODE.FORBIDDON);
+    }
+
+    // update task status
+    task.status = task.status === STATUS.ACTIVE ? STATUS.COMPLETED : STATUS.ACTIVE;
+    const updatedTask = await taskRepo.update(task);
+
+    return {
+      success: true,
+      status: STATUS_CODE.OK,
       data: {
         task: updatedTask,
       },
