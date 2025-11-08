@@ -66,7 +66,7 @@
    ```
    ## environment variables
    ENV=development
-   PORT=8000 (make sure the port is set to 8000 if running the server with docker)
+   PORT=8000
 
    ## mongo db
    MONGO_URI=mongodb+srv://<username>:<password>@<cluster-name>-cluster.2bsublg.mongodb.net/<database>
