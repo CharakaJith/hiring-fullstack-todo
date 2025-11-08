@@ -11,4 +11,9 @@ module.exports = {
       FAILED: (error) => `Unable to connect to the database: ${error}`,
     },
   },
+
+  // validations
+  VALIDATION: {
+    FAILED: 'Validation failed.',
+  },
 };
