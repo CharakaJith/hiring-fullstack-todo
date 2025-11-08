@@ -10,7 +10,7 @@ const HomePage: React.FC = () => {
 
       {/* main content */}
       <main className="flex flex-col items-start justify-start flex-1 text-left px-0 py-0 pt-28 h-[calc(100vh-7rem)] w-full">
-        <div className="w-full h-full bg-white/70 shadow-lg p-6 overflow-hidden">
+        <div className="w-full h-full bg-white/70 shadow-lg p-6 overflow-hidden rounded-3xl">
           <TaskBlock />
         </div>
       </main>

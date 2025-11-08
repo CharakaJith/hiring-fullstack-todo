@@ -1,23 +1,61 @@
 import React from 'react';
 import useCreate from '../hooks/useCreate';
+import useEdit from '../../edit/hooks/useEdit';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ErrorBox from './ErrorBox';
 
-const CreateForm: React.FC<{ onCreated?: () => void }> = ({ onCreated }) => {
-  const { title, description, setTitle, setDescription, handleSubmit, loading, error, isError, task } = useCreate();
+interface CreateFormProps {
+  onCreated?: () => void;
+  onUpdated?: () => void;
+  editTask?: {
+    id: string;
+    title: string;
+    description: string;
+  } | null;
+  onCancelEdit?: () => void;
+}
 
-  // call onCreated callback when a new task is successfully created
+const CreateForm: React.FC<CreateFormProps> = ({ onCreated, onUpdated, editTask, onCancelEdit }) => {
+  const createHook = useCreate();
+  const editHook = useEdit(editTask?.id || '');
+
+  // use edit in edit mode else create
+  const isEditMode = !!editTask;
+  const { title, description, setTitle, setDescription, handleSubmit, loading, error, isError, task } = isEditMode ? editHook : createHook;
+
+  // pass data on edit mode
   React.useEffect(() => {
-    if (task && onCreated) {
-      onCreated();
+    if (isEditMode && editTask) {
+      setTitle(editTask.title);
+      setDescription(editTask.description);
+    } else if (!isEditMode) {
+      // reset values
+      setTitle('');
+      setDescription('');
     }
-  }, [task, onCreated]);
+  }, [isEditMode, editTask, setTitle, setDescription]);
+
+  // handle submit
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    await handleSubmit(e);
+  };
+
+  // callback on success
+  React.useEffect(() => {
+    if (task) {
+      if (isEditMode && onUpdated) {
+        onUpdated();
+      } else if (!isEditMode && onCreated) {
+        onCreated();
+      }
+    }
+  }, [task, isEditMode, onCreated, onUpdated]);
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md space-y-4">
-      <h2 className="text-xl font-semibold mb-2">Create New Task</h2>
+    <form onSubmit={handleFormSubmit} className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md space-y-4">
+      <h2 className="text-xl font-semibold mb-2">{isEditMode ? `Edit Task: ${editTask?.title}` : 'Create New Task'}</h2>
 
       {/* task title */}
       <div className="flex flex-col">
@@ -45,11 +83,19 @@ const CreateForm: React.FC<{ onCreated?: () => void }> = ({ onCreated }) => {
       {/* errors */}
       {isError && error.length > 0 && <ErrorBox messages={error} />}
 
-      {/* submit button */}
-      <div className="flex justify-end">
+      {/* action buttons */}
+      <div className="flex justify-end gap-2">
+        {/* save/update button */}
         <Button type="submit" className="bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded-md cursor-pointer" disabled={loading}>
-          {loading ? 'Creating...' : 'Create Task'}
+          {loading ? (isEditMode ? 'Updating...' : 'Creating...') : isEditMode ? 'Update' : 'Save'}
         </Button>
+
+        {/* cancel button */}
+        {isEditMode && (
+          <Button type="button" onClick={onCancelEdit} className="bg-gray-700 hover:bg-gray-900 text-white px-4 py-2 rounded-md cursor-pointer">
+            Cancel
+          </Button>
+        )}
       </div>
     </form>
   );

@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { useState, forwardRef, useImperativeHandle } from 'react';
 import { RefreshCwIcon, CheckCircleIcon, CircleIcon, ListIcon, LoaderIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import useGet from '../hooks/useGet';
 import { Button } from '@/components/ui/button';
@@ -8,13 +8,10 @@ import TaskDeleteModal from '../../delete/components/TaskDeleteModal';
 import type { Task } from '@/types/task/task';
 import useToggle from '../../toggleStatus/hooks/useToggle';
 import ToolTip from '@/components/tooltip/tooltip';
+import type { TaskDisplayRef } from '../types/TaskDisplayRef';
+import type { TaskDisplayProps } from '../props/TaskDisplayProps';
 
-// Define the ref type
-export interface TaskDisplayRef {
-  refetch: () => void;
-}
-
-const TaskDisplay = forwardRef<TaskDisplayRef>((props, ref) => {
+const TaskDisplay = forwardRef<TaskDisplayRef, TaskDisplayProps>(({ onEditTask }, ref) => {
   const { task, changeTaskStatus } = useToggle();
 
   const { activeTasks, completedTasks, loading, error, refetch } = useGet();
@@ -24,7 +21,7 @@ const TaskDisplay = forwardRef<TaskDisplayRef>((props, ref) => {
   const [deleteTaskTitle, setDeleteTaskTitle] = useState<string>('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // Eepose refetch
+  // expose refetch
   useImperativeHandle(ref, () => ({
     refetch: () => {
       refetch();
@@ -33,6 +30,7 @@ const TaskDisplay = forwardRef<TaskDisplayRef>((props, ref) => {
 
   const allTasks = [...activeTasks, ...completedTasks];
 
+  // handle task tabs
   const getTasksToDisplay = () => {
     switch (activeTab) {
       case TabType.ACTIVE:
@@ -54,11 +52,22 @@ const TaskDisplay = forwardRef<TaskDisplayRef>((props, ref) => {
     setIsDeleteModalOpen(true);
   };
 
+  // handle edit
+  const handleEdit = (task: Task) => {
+    if (onEditTask) {
+      onEditTask({
+        id: task._id,
+        title: task.title,
+        description: task.description || '',
+      });
+    }
+  };
+
   // handle toggle status
   const handleToggleStatus = async (taskId: string) => {
     await changeTaskStatus(taskId);
     if (task) {
-      refetch(); // refresh all tasks after toggle
+      refetch();
     }
   };
 
@@ -188,7 +197,10 @@ const TaskDisplay = forwardRef<TaskDisplayRef>((props, ref) => {
                     <div className="flex flex-row gap-2 items-center">
                       {/* edit button */}
                       <ToolTip text={`Update task ${task.title}`}>
-                        <Button className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-600 text-white rounded-md cursor-pointer">
+                        <Button
+                          onClick={() => handleEdit(task)}
+                          className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-600 text-white rounded-md cursor-pointer"
+                        >
                           <PencilIcon />
                         </Button>
                       </ToolTip>
@@ -233,7 +245,7 @@ const TaskDisplay = forwardRef<TaskDisplayRef>((props, ref) => {
         taskId={deleteTaskId!}
         taskTitle={deleteTaskTitle}
         onDeleted={() => {
-          refetch(); // refresh tasks after deletion
+          refetch();
         }}
       />
     </div>

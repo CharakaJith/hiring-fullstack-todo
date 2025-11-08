@@ -6,6 +6,7 @@ import NotFoundPage from '@/pages/NotFoundPage';
 function AppRouter() {
   return (
     <Routes>
+      {/* public routes */}
       <Route path="/" element={<HomePage />} />
 
       {/* default */}

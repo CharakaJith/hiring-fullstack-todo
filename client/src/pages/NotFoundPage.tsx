@@ -13,12 +13,7 @@ const NotFoundPage: React.FC = () => {
       {/* background image */}
       <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(/src/assets/images/notfound.webp)` }} />
 
-      {/* top text */}
-      <div className="relative z-10 mt-10 text-center">
-        <h1 className="text-5xl font-bold text-white">Page Not Found</h1>
-      </div>
-
-      {/* button at bottom */}
+      {/* button */}
       <div className="relative z-10 mb-15">
         <Button className="bg-blue-800 hover:bg-blue-950 cursor-pointer text-xl py-5 px-6" onClick={handleGoBack}>
           Go back

@@ -4,6 +4,7 @@ import Logo from '../../../public/logo.png';
 
 const NavBar: React.FC = () => {
   return (
+    // navbar area
     <header className="fixed top-0 left-0 w-full bg-gray-900 text-white flex items-center justify-between px-5 md:px-20 py-4 shadow-md z-50 cursor-default">
       {/* logo */}
       <div className="flex items-center">

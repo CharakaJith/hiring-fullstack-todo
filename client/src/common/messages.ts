@@ -1,9 +1,11 @@
+// error messages
 export const ERROR = {
   UNEXPECTED: 'An unexpected error occurred',
 
-  LOAD_FAILED: (unit: string) => `Failed to load ${unit}`,
+  LOAD_FAILED: (unit: string) => `Failed to load ${unit}!`,
 } as const;
 
+// task related messages
 export const TASK = {
   NOT_FOUND: {
     ALL: 'No tasks found. Create your first task to get started!',
@@ -12,6 +14,7 @@ export const TASK = {
   },
 };
 
+// validation messages
 export const VALIDATE = {
   EMPTY_FIELDS: 'Please fill in all required fields.',
 };
