@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const MongoDB = require('./connections/mongodb');
+const errorHandler = require('./middleware/errorHandler');
 const { CORS } = require('./common/messages');
 require('dotenv').config({
   path: process.env.ENV_PATH || '.env',
@@ -32,6 +33,9 @@ app.use(
 
 // connect to mongodb
 MongoDB.connect();
+
+// global error handler
+app.use(errorHandler);
 
 // start the server
 app.listen(PORT, () => {
