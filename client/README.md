@@ -32,7 +32,7 @@
    ```bash
    cd hiring-fullstack-todo
    ```
-3. Checkout to `develop` branc
+3. Checkout to `develop` branch
    ```
    git checkout develop
    ```
@@ -59,6 +59,11 @@
    ```bash
    npm run dev
    ```
+
+### Declaration
+
+- This project, including all source code and documentation, was developed by tha author as part of the Type B Digital Full-stack Developer technical assessment.
+- ChatGPT was used for minor UI styling suggestions and layout decisions. All backend functionality, including API implementation, database interactions, business logic, as well as the frontend architecture, component logic, state management, API integration, TypeScript implementation, and the overall development approach were independently architected and implemented by the author.
 
 ## Contact
 
