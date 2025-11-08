@@ -1,0 +1,39 @@
+{
+  "name": "hiring-fullstack-todo",
+  "version": "1.0.0",
+  "description": "Full-stack TODO app for Type B Digital assessment (React + Node.js + MongoDB).",
+  "main": "app.js",
+  "scripts": {
+    "dev": "cross-env ENV_PATH=.env.dev nodemon app.js",
+    "prod": "cross-env ENV_PATH=.env.prod nodemon app.js",
+    "start": "concurrently \"npm run dev\" \"npm run client\"",
+    "client": "cd client && npm run dev",
+    "install:all": "npm install && cd client && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CharakaJith/hiring-fullstack-todo.git"
+  },
+  "author": "Charaka Jith Gunasinghe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CharakaJith/hiring-fullstack-todo/issues"
+  },
+  "homepage": "https://github.com/CharakaJith/hiring-fullstack-todo#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.3",
+    "nanoid": "^5.1.6",
+    "winston": "^3.18.3",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "nodemon": "^3.1.10"
+  }
+}

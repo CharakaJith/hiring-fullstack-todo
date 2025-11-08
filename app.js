@@ -1,0 +1,51 @@
+const express = require('express');
+const cors = require('cors');
+const MongoDB = require('./connections/mongodb');
+const errorHandler = require('./middleware/errorHandler');
+const { CORS } = require('./common/messages');
+require('dotenv').config({
+  path: process.env.ENV_PATH || '.env',
+});
+
+const ENV = process.env.NODE_ENV || 'development';
+const PORT = process.env.PORT || 3000;
+
+const routesV1 = require('./routes/v1/index');
+const routesV2 = require('./routes/v2/index');
+
+// initialize the express app
+const app = express();
+app.use(express.json({ limit: '10kb' }));
+
+// initialize cors
+const allowedOrigins = [process.env.FRONTEND_URL || 'http://localhost:5173'];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error(CORS.INVALID));
+      }
+    },
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Access-Token'],
+  }),
+);
+
+// connect to mongodb
+MongoDB.connect();
+
+// setup routing paths
+app.use('/api/v1', routesV1);
+app.use('/api/v2', routesV2);
+
+// global error handler
+app.use(errorHandler);
+
+// start the server
+app.listen(PORT, () => {
+  console.log('server started....');
+  console.log(`${ENV} | ${PORT}`);
+});
