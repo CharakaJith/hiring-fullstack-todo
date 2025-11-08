@@ -1,73 +1,78 @@
-# React + TypeScript + Vite
+<div align="center">
+  <h1>React Task Management Frontend</h1>
+  <h4>Full Stack Take-home Assignment (Type B Digital)</h4>
+</div>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### This is the frontend client for the MERN stack task tracking application, built with React, TypeScript, and modern web technologies. The application provides an intuitive and responsive interface for managing tasks with real-time updates and seamless user experience.
 
-Currently, two official plugins are available:
+### Built with modern React patterns and best practices, the frontend features a clean component architecture, custom hooks for state management, and a responsive design that works across all devices.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Built with
 
-## React Compiler
+- [![React][React.js]][React-url]
+- [![TypeScript][TypeScript]][TypeScript-url]
+- [![Vite][Vite.js]][Vite-url]
+- [![TailwindCSS][TailwindCss]][Tailwind-url]
+- [![Shadcn/ui][ShadcnUI]][ShadcnUI-url]
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
+### Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React.js: [React official website](https://reactjs.org/)
+- Vite: [Vite start guide](https://vite.dev/guide/)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Installation
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1. Clone the repo
+   ```bash
+   git clone https://github.com/CharakaJith/hiring-fullstack-todo.git
+   ```
+2. Step into the project
+   ```bash
+   cd hiring-fullstack-todo
+   ```
+3. Checkout to `develop` branc
+   ```
+   git checkout develop
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Environment variables setup
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Create a `.env` file in the client folder
+   ```
+   New-Item -Path . -Name ".env" -ItemType "File"
+   ```
+2. Open the `.env` file and update the variables
+   ```
+   ## base url
+   VITE_API_BASE_URL=http://localhost:8000 (or the port you have used)
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Start the project using terminal
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Install NPM packages
+   ```bash
+   npm run install
+   ```
+2. Start the client
+   ```bash
+   npm run dev
+   ```
+
+## Contact
+
+Email: [charaka.info@gmail.com](mailto:charaka.info@gmail.com) | LinkedIn: [Charaka Jith Gunasinghe](https://www.linkedin.com/in/charaka-gunasinghe/)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[TypeScript]: https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
+[TypeScript-url]: https://www.typescriptlang.org/
+[Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[Vite-url]: https://vite.dev
+[TailwindCss]: https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[ShadcnUI]: https://img.shields.io/badge/shadcn/ui-000000?style=for-the-badge&logo=shadcnui&logoColor=white
+[ShadcnUI-url]: https://ui.shadcn.com/
